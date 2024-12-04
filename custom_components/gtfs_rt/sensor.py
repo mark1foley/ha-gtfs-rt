@@ -172,11 +172,9 @@ class PublicTransportSensor(Entity):
 
     @property
     def name(self):
-        """Return the name of the sensor."""
         return self._name
 
     def _get_next_services(self):
-        """Get the next service data from the GTFS feed."""
         return (
             self.data.info.get(self._route, {})
             .get(self._direction, {})
@@ -185,7 +183,6 @@ class PublicTransportSensor(Entity):
 
     @property
     def state(self):
-        """Return the state of the sensor."""
         next_services = self._get_next_services()
         return (
             due_in_minutes(next_services[0].arrival_time)
@@ -261,7 +258,6 @@ class PublicTransportSensor(Entity):
             )
         except KeyError:
             log_info([ATTR_LATITUDE, "not defined"], 1)
-
         try:
             log_info(
                 [ATTR_LONGITUDE, self.extra_state_attributes[ATTR_LONGITUDE]],
