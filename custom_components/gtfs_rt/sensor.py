@@ -183,6 +183,7 @@ class PublicTransportSensor(Entity):
 
     @property
     def state(self):
+        """Return the state of the sensor."""
         next_services = self._get_next_services()
         return (
             due_in_minutes(next_services[0].arrival_time)
@@ -225,12 +226,10 @@ class PublicTransportSensor(Entity):
 
     @property
     def icon(self):
-        """Return the icon for the sensor."""
         return self._icon
 
     @property
     def service_type(self):
-        """Return the type of transport service."""
         return self._service_type
 
     def update(self):
@@ -252,12 +251,14 @@ class PublicTransportSensor(Entity):
             )
         except KeyError:
             log_info([ATTR_DUE_AT, "not defined"], 1)
+            
         try:
             log_info(
                 [ATTR_LATITUDE, self.extra_state_attributes[ATTR_LATITUDE]], 1
             )
         except KeyError:
             log_info([ATTR_LATITUDE, "not defined"], 1)
+            
         try:
             log_info(
                 [ATTR_LONGITUDE, self.extra_state_attributes[ATTR_LONGITUDE]],
@@ -265,6 +266,7 @@ class PublicTransportSensor(Entity):
             )
         except KeyError:
             log_info([ATTR_LONGITUDE, "not defined"], 1)
+            
         try:
             log_info(
                 [
