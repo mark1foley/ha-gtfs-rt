@@ -159,7 +159,16 @@ class PublicTransportSensor(Entity):
         self._direction = direction
         self._icon = icon
         self._service_type = service_type
+        
+        # Generate a unique_id by combining the stop ID and route (and optionally direction)
+        self._unique_id = f"{route}_{stop}_{direction}"
+        
         self.update()
+
+    @property
+    def unique_id(self):
+        """Return a unique ID for this entity."""
+        return self._unique_id
 
     @property
     def name(self):
@@ -224,7 +233,7 @@ class PublicTransportSensor(Entity):
         return self._service_type
 
     def update(self):
-        """Get the latest data from opendata.ch and update the states."""
+        """Update the sensor with the latest data from the GTFS feed."""
         self.data.update()
         log_info(["Sensor Update:"], 0)
         log_info(["Name", self._name], 1)
@@ -242,14 +251,14 @@ class PublicTransportSensor(Entity):
             )
         except KeyError:
             log_info([ATTR_DUE_AT, "not defined"], 1)
-
+            
         try:
             log_info(
                 [ATTR_LATITUDE, self.extra_state_attributes[ATTR_LATITUDE]], 1
             )
         except KeyError:
             log_info([ATTR_LATITUDE, "not defined"], 1)
-
+            
         try:
             log_info(
                 [ATTR_LONGITUDE, self.extra_state_attributes[ATTR_LONGITUDE]],
@@ -257,7 +266,7 @@ class PublicTransportSensor(Entity):
             )
         except KeyError:
             log_info([ATTR_LONGITUDE, "not defined"], 1)
-
+            
         try:
             log_info(
                 [
